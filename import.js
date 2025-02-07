@@ -9,6 +9,8 @@ var env = "";
 var mapi = "";
 var lang = "";
 var newItems = true;
+var allowedElementTypes = ["date_time", "custom", "number", "rich_text", "text", "url_slug", "modular_content", "subpages", "multiple_choice", "taxonomy"];
+var arrayElementTypes = ["modular_content", "subpages", "multiple_choice", "taxonomy"];
 
 $(document).ready(function() {	
 	
@@ -201,7 +203,6 @@ function loadElements(type) {
 }
 
 function processElements(data) {	
-	var allowedElementTypes = ["date_time", "custom", "number", "rich_text", "text", "url_slug"];
 	for (var x = 0; x < data.length; x++) {		
 		if (allowedElementTypes.includes(data[x].type)) {
 			kai_elements.push(data[x]);
@@ -361,6 +362,7 @@ function createItem(itemData, extID, extIDIndex, itemName, itemNameIndex) {
 			xhr.setRequestHeader('content-type','application/json');
 		},
 		success: function (data) {
+			consoleOutput("New item '"+itemName+"' created.");
 			createLanguageVariant(itemData, extID, extIDIndex, itemName, itemNameIndex);
 		},
 		error:function(jqXHR, textStatus, errorThrown){			
@@ -382,19 +384,33 @@ function createLanguageVariant(itemData, extID, extIDIndex, itemName, itemNameIn
 				createLanguageVariantData.elements.push({
 													"element": {
 														"codename": item[1]
-														},
-														"value": itemData[item[0]],
-														"mode": "custom"
+													},
+													"value": itemData[item[0]],
+													"mode": "custom"
 												});	
+			}
+			else if (arrayElementTypes.includes(findElementType(item[1]))) {
+				var values = itemData[item[0]].split(',');
+				createLanguageVariantData.elements.push({
+													"element": {
+														"codename": item[1]
+													},
+													"value": []
+												});						
+				$.each(values, function (j, value) {					
+					createLanguageVariantData.elements[(createLanguageVariantData.elements.length-1)].value.push({
+													"codename": value
+												});	
+				});
 			}
 			else {	
 				createLanguageVariantData.elements.push({
 													"element": {
 														"codename": item[1]
-														},
-														"value": itemData[item[0]]
+													},
+													"value": itemData[item[0]]
 												});				
-			}					
+			}		
 		}
 	});
 	
@@ -408,7 +424,7 @@ function createLanguageVariant(itemData, extID, extIDIndex, itemName, itemNameIn
 			xhr.setRequestHeader('content-type','application/json');
 		},
 		success: function (data) {
-			consoleOutput("Language variant '"+extID+"' in language '"+lang+"' upserted");
+			consoleOutput("Language variant '"+extID+"' in language '"+lang+"' upserted.");
 		},
 		error:function(jqXHR, textStatus, errorThrown){
 			console.log(jqXHR.responseText);
