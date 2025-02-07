@@ -2,7 +2,7 @@
 
 This tool allows you to import or update your table data into Kontent.ai.
 
-This tool is based on [[https://datatables.net/](https://bossanova.uk/jspreadsheet/)](https://bossanova.uk/jspreadsheet/), which is under Free MIT license.
+This tool is based on [https://bossanova.uk/jspreadsheet/](https://bossanova.uk/jspreadsheet/), which is under Free MIT license.
 
 You can test it here -> [Spreadsheet Import](https://kontentapp.azurewebsites.net/apps/spreadsheet_import/)
 
