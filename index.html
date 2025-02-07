@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spreadsheet Import</title>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	
+	<script src="https://cdn.jsdelivr.net/npm/jspreadsheet-ce@4/dist/index.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jspreadsheet-ce@4/dist/jspreadsheet.min.css" type="text/css" />
+	<script src="https://cdn.jsdelivr.net/npm/jsuites/dist/jsuites.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsuites/dist/jsuites.min.css" type="text/css" />
+	
+	<link rel="stylesheet" href="./styles.css" type="text/css" />
+	<script src="./import.js"></script>
+		
+</head>
+<body>
+
+	<div class="overlay">Getting data</div>
+	
+	
+	<div class="page1 header">Spreadsheet import - Data entry</div>
+	<div class="page2 header">Spreadsheet import - Data preview</div>
+	<div class="page3 header">Spreadsheet import - Data import</div>
+
+	<div id="msg"></div>
+
+	<div class="key_inputs page1">
+	
+		<div>Environment ID: <input id="envid" type="text" size="50" /></div>
+		<div>Management API: <input id="mapi"  type="text" size="50" /></div>		
+	
+	</div>	
+
+	<div id='spreadsheet'></div>
+
+	
+	<div>
+	
+		<button id="proceed" class="page1">Proceed to mapping</button>
+	
+	</div>
+
+	
+	<div class="page2">
+	
+		<label for="types">Which content type your data represent?</label>
+
+		<select name="types" id="types">
+			<option value="">Select a content type</a>
+		</select>
+		
+		<div id="mapping"></div>
+			
+		<button id="back">Back to editing</button>
+		
+		<button id="language">Proceed to language selection</button>
+	
+	</div>
+	
+	
+	<div class="page3">
+	
+		<label for="languages">Which language do you want to import to?</label>
+	
+		<select name="languages" id="languages">
+			<option value="">Select a language</a>
+		</select>
+		
+		<div>
+			<input type="checkbox" name="newItems" id="newItems" value="newItems" checked /><label for="newItems" title="If unchecked, the data will be imported as new variants or updates to existing ones">Import as completely new items</label>
+		</div>	
+		
+		<button id="back_mapping">Back to mapping</button>
+		
+		<button id="import"><strong>Import items</strong></button>
+		
+		<div id="console"></div>
+	
+	</div>
+	
+</body>
+</html>
