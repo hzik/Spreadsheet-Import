@@ -20,8 +20,8 @@ While importing new language variants, your table data must contain External IDs
 
 ## Importing non-simple element values
 
-When importing content to rich text, the content needs to be formatted based on our guidelines -> https://kontent.ai/learn/docs/apis/openapi/management-api-v2/#section/HTML5-elements-allowed-in-rich-text
-Importing array values such as content for Multiple choice, Taxonomy, Linked items and Subpages element needs to be in format of a list of codenames separated by a comma (first,second,third)
+When importing content to rich text, the content needs to be formatted based on our guidelines -> https://kontent.ai/learn/docs/apis/openapi/management-api-v2/#section/HTML5-elements-allowed-in-rich-text. 
+Importing array values such as content for Multiple choice, Taxonomy, Linked items and Subpages element needs to be in format of a list of codenames separated by a comma -> first,second,third
 
 ## Deploying
 
