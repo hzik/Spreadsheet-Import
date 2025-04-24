@@ -218,6 +218,7 @@ function showMapping() {
 		mapping_item += '<select column="'+i+'">';
 		mapping_item += '<option value="">Select an element</option>';
 		mapping_item += '<option value="%extid%">[external id]</option>';
+		mapping_item += '<option value="%intid%">[internal id]</option>';
 		mapping_item += '<option value="%itemname%">[item name]</option>';
 		$.each(kai_elements, function (j, elem) {
 			mapping_item += '<option value="'+elem.codename+'">'+elem.name+' ('+elem.type+')</option>';
@@ -283,6 +284,8 @@ function showLanguageOptions() {
 function importItems() {
 	var hasExtID = false;
 	var extIDIndex = -1;
+	var hasIntID = false;
+	var intIDIndex = -1;
 	var hasItemName = false;
 	var itemNameIndex = -1;
 	$.each(headers, function (i, item) {
@@ -292,19 +295,24 @@ function importItems() {
 				hasExtID = true;
 				extIDIndex = i;
 			}
+			if ($("select[column='" + i +"']").val() == "%intid%") {
+				hasIntID = true;
+				intIDIndex = i;
+			}
 			if ($("select[column='" + i +"']").val() == "%itemname%") {
 				hasItemName = true;
 				itemNameIndex = i;
 			}
 		}
 	});
-	importData(hasExtID, extIDIndex, hasItemName, itemNameIndex);
+	importData(hasExtID, extIDIndex, hasItemName, itemNameIndex, hasIntID, intIDIndex);
 }
 
-function importData(hasExtID, extIDIndex, hasItemName, itemNameIndex) {
+function importData(hasExtID, extIDIndex, hasItemName, itemNameIndex, hasIntID, intIDIndex) {
 	$.each(table_data, function (i, item) {
 		var itemName = "";
 		var extID = "";
+		var intID = "";
 		var randSuf = makeID(8);
 		if (hasItemName) {
 			itemName = table_data[i][itemNameIndex];
@@ -318,12 +326,15 @@ function importData(hasExtID, extIDIndex, hasItemName, itemNameIndex) {
 		else {
 			extID = "untitled_item_"+randSuf;
 		}
+		if (hasIntID) {
+			intID = table_data[i][intIDIndex];
+		}
 		
 		if (newItems) {
 			setTimeout(createItem, (777*(i+1)), table_data[i], extID, extIDIndex, itemName, itemNameIndex);
 		}
 		else {
-			setTimeout(createLanguageVariant, (777*(i+1)), table_data[i], extID, extIDIndex, itemName, itemNameIndex);
+			setTimeout(createLanguageVariant, (777*(i+1)), table_data[i], extID, extIDIndex, itemName, itemNameIndex, intID);
 		}
 	});
 }
@@ -363,7 +374,7 @@ function createItem(itemData, extID, extIDIndex, itemName, itemNameIndex) {
 		},
 		success: function (data) {
 			consoleOutput("New item '"+itemName+"' created.");
-			createLanguageVariant(itemData, extID, extIDIndex, itemName, itemNameIndex);
+			createLanguageVariant(itemData, extID, extIDIndex, itemName, itemNameIndex, null);
 		},
 		error:function(jqXHR, textStatus, errorThrown){			
 			console.log(jqXHR.responseText);
@@ -372,14 +383,20 @@ function createItem(itemData, extID, extIDIndex, itemName, itemNameIndex) {
 	});	
 }
 
-function createLanguageVariant(itemData, extID, extIDIndex, itemName, itemNameIndex) { 
-	var createLanguageVariantUrl = 'https://manage.kontent.ai/v2/projects/'+env+'/items/external-id/'+extID+'/variants/codename/'+lang;
+function createLanguageVariant(itemData, extID, extIDIndex, itemName, itemNameIndex, intID) { 
+	var createLanguageVariantUrl = "";
+	if (intID) {
+		createLanguageVariantUrl = 'https://manage.kontent.ai/v2/projects/'+env+'/items/'+intID+'/variants/codename/'+lang;			
+	}
+	else {
+		createLanguageVariantUrl = 'https://manage.kontent.ai/v2/projects/'+env+'/items/external-id/'+extID+'/variants/codename/'+lang;		
+	}
 	var createLanguageVariantData = {
 									"elements": []
 									};
 									
 	$.each(dataPaires, function (i, item) {
-		if (item[1] && item[1] != "%extid%" && item[1] != "%itemname%") {
+		if (item[1] && item[1] != "%extid%" && item[1] != "%intid%" && item[1] != "%itemname%") {
 			if (findElementType(item[1]) == "url_slug") {
 				createLanguageVariantData.elements.push({
 													"element": {
@@ -428,7 +445,7 @@ function createLanguageVariant(itemData, extID, extIDIndex, itemName, itemNameIn
 		},
 		error:function(jqXHR, textStatus, errorThrown){
 			console.log(jqXHR.responseText);
-			consoleOutput("<span class='error'>Language variant '"+extID+"' in language '"+lang+"' couldn't be userted. Check the console for errors.</span>");
+			consoleOutput("<span class='error'>Language variant '"+extID+"' in language '"+lang+"' couldn't be upserted. Check the console for errors.</span>");
 		} 
 	});	
 }
