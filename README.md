@@ -8,15 +8,15 @@ You can test it here -> [Spreadsheet Import](https://kontentapp.azurewebsites.ne
 
 ## Importing new items
 
-You don't have to specify the Item name or the External ID in your spreadsheet data when importing new items. However, when you don't specify the External ID column, you won't be able to update that item in the future using this tool and you won't be able to import language variants of this item to other languages in your project. "Import as new items" is checked.
+You don't have to specify the Item name or the External ID in your spreadsheet data when importing new items. "Import as new items" is checked.
 
 ## Updating items
 
-While updating items, your table data must contain External IDs for the tool to find items to update. "Import as new items" is unchecked.
+While updating items, your table data must contain External IDs or Internal IDs for the tool to find items to update. "Import as new items" is unchecked.
 
 ## Importing language variants
 
-While importing new language variants, your table data must contain External IDs for the tool to know which variant of an item that is. "Import as new items" is unchecked.
+While importing new language variants, your table data must contain External IDs or Internal IDs for the tool to know which variant of an item that is. "Import as new items" is unchecked.
 
 ## Importing non-simple element values
 
